@@ -4,6 +4,7 @@ const width = 5;
 let row = 0;
 let col = 0;
 let gameOver = false;
+
 const wordList = [
     "арбуз", "банка", "багор", "балет", "баран", "баржа", "башня", "белка",
     "букет", "булка", "буран", "вагон", "ванна", "ведро", "весна", "ветер",
@@ -39,11 +40,14 @@ const wordList = [
     "шторм", "штука", "шумок", "щенок", "экран", "элита", "ягель", "якорь",
     "ямина", "ярица", "ясень", "яхонт"
 ];
+const word = wordList[Math.floor(Math.random() * wordList.length)];
 
 window.onload = function () {
     initialize();
+    checkAndCreateKeyboard();            // ДОБАВЛЕНО
+    window.addEventListener("resize", checkAndCreateKeyboard); // ДОБАВЛЕНО
 };
-const word = wordList[Math.floor(Math.random() * wordList.length)];
+
 function initialize() {
     let board = document.getElementById("board");
     for (let r = 0; r < height; r++) {
@@ -56,13 +60,68 @@ function initialize() {
     }
     
 }
- document.addEventListener("keydown", processKey);
+    document.addEventListener("keydown", processKey);
+
+function checkAndCreateKeyboard() {
+    if (window.innerWidth <= 1024) {
+        createMobileKeyboard();
+    } else {
+        const keyboardDiv = document.getElementById("keyboard");
+        if (keyboardDiv) keyboardDiv.innerHTML = "";
+    }
+}
+
+function createMobileKeyboard() {
+    const keyboardDiv = document.getElementById("keyboard");
+    if (!keyboardDiv) return;
+    keyboardDiv.innerHTML = "";
+    const rows = [
+        ["й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ"],
+        ["ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э"],
+        ["я", "ч", "с", "м", "и", "т", "ь", "б", "ю", "ё"]
+    ];
+    rows.forEach(rowLetters => {
+        const rowDiv = document.createElement("div");
+        rowDiv.style.display = "flex";
+        rowDiv.style.justifyContent = "center";
+        rowDiv.style.marginBottom = "6px";
+        rowLetters.forEach(letter => {
+            const btn = document.createElement("button");
+            btn.textContent = letter.toUpperCase();
+            btn.classList.add("key-btn");
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                processKey({ key: letter, preventDefault: () => {} });
+            });
+            rowDiv.appendChild(btn);
+        });
+        keyboardDiv.appendChild(rowDiv);
+    });
+    const specialRow = document.createElement("div");
+    specialRow.style.display = "flex";
+    specialRow.style.justifyContent = "center";
+    specialRow.style.gap = "6px";
+    specialRow.style.marginTop = "6px";
+    const backBtn = document.createElement("button");
+    backBtn.textContent = "⌫";
+    backBtn.classList.add("key-btn", "special");
+    backBtn.addEventListener("click", () => {
+        processKey({ key: "Backspace", preventDefault: () => {} });
+    });
+    const enterBtn = document.createElement("button");
+    enterBtn.textContent = "ПРОВЕРИТЬ";
+    enterBtn.classList.add("key-btn", "special");
+    enterBtn.addEventListener("click", () => {
+        processKey({ key: "Enter", preventDefault: () => {} });
+    });
+    specialRow.appendChild(backBtn);
+    specialRow.appendChild(enterBtn);
+    keyboardDiv.appendChild(specialRow);
+} 
 
 function processKey(e) {
     if (gameOver) return;
-
     let key = e.key.toLowerCase();
-
     if (/^[а-яё]$/.test(key)) {
         if (col < width) {
             let tile = document.getElementById(row + "-" + col);
@@ -78,7 +137,6 @@ function processKey(e) {
     } else if (key === "enter") {
         if (col !== width) return;
         update();
-
         if (!gameOver) {
             row++;
             col = 0;
