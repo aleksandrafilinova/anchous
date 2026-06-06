@@ -123,4 +123,73 @@ hr {
         font-size: 18px;
         margin: 15px 0 10px;
     }
+    
+}
+#menu{
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0,0,0,0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1000;
+}
+
+.menu-content{
+    width: 320px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 15px;
+
+    box-shadow: 0 0 30px rgba(0,0,0,.3);
+}
+
+.menu-content button{
+    width: 220px;
+    height: 55px;
+
+    border: none;
+
+    border-radius: 15px;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+#start-btn{
+    background: #6AAA64;
+    color: white;
+}
+
+.dark-theme{
+    background: #121213;
+    color: white;
+}
+
+.dark-theme .tile{
+    border-color: #3a3a3c;
+    color: white;
+}
+
+.dark-theme .menu-content{
+    background: #202124;
+}
+
+.dark-theme .key-btn{
+    background: #818384;
+    color: white;
 }

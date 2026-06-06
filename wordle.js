@@ -43,9 +43,34 @@ const wordList = [
 const word = wordList[Math.floor(Math.random() * wordList.length)];
 
 window.onload = function () {
+
     initialize();
-    checkAndCreateKeyboard();            // ДОБАВЛЕНО
-    window.addEventListener("resize", checkAndCreateKeyboard); // ДОБАВЛЕНО
+
+    checkAndCreateKeyboard();
+
+    window.addEventListener("resize", checkAndCreateKeyboard);
+
+
+    document.getElementById("start-btn").addEventListener("click", () => {
+
+        document.getElementById("menu").style.display = "none";
+
+    });
+
+
+    document.getElementById("dark-theme").addEventListener("click", () => {
+
+        document.body.classList.add("dark-theme");
+
+    });
+
+
+    document.getElementById("light-theme").addEventListener("click", () => {
+
+        document.body.classList.remove("dark-theme");
+
+    });
+
 };
 
 function initialize() {
@@ -184,4 +209,5 @@ function update() {
         document.getElementById("answer").innerText = "🎉 Поздравляем! Вы угадали слово!";
         gameOver = true;
     }
+    
 }
