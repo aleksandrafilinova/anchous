@@ -7,15 +7,16 @@ let gameOver = false;
 
 let wordList = [];
 let word = "";
+let wins = localStorage.getItem("wins") ? parseInt(localStorage.getItem("wins")) : 0;
 
 window.onload = async function () {
 
-    // Загружаем слова из words.json
     const response = await fetch("word.json");
 
     wordList = await response.json();
 
     word = wordList[Math.floor(Math.random() * wordList.length)];
+    document.getElementById("wins-count").innerText = wins;
 
     initialize();
 
@@ -141,6 +142,11 @@ function update() {
         guess += tile.innerText.toLowerCase();
     }
 
+    if (!wordList.includes(guess)) {
+        alert("Такого слова нет в списке!");
+        return; 
+    }
+
     let colors = Array(width).fill("absent");
     let remainingLetters = word.split("");
 
@@ -168,8 +174,11 @@ function update() {
     }
 
     if (guess === word) {
-        document.getElementById("answer").innerText = "🎉 Поздравляем! Вы угадали слово!";
-        gameOver = true;
+    wins++;
+    localStorage.setItem("wins", wins);
+    document.getElementById("wins-count").innerText = wins;
+    document.getElementById("answer").innerText = "🎉 Поздравляем! Вы угадали слово!";
+    gameOver = true;
     }
     
 }
