@@ -143,9 +143,15 @@ function update() {
     }
 
     if (!wordList.includes(guess)) {
-        alert("Такого слова нет в списке!");
-        return; 
+    alert("Такого слова нет в списке!");
+    for (let c = 0; c < width; c++) {
+        let tile = document.getElementById(row + "-" + c);
+        tile.innerText = "";
+        tile.classList.remove("correct", "present", "absent");
     }
+    col = 0;
+    return;
+}
 
     let colors = Array(width).fill("absent");
     let remainingLetters = word.split("");
