@@ -122,10 +122,10 @@ function processKey(e) {
             let tile = document.getElementById(row + "-" + col);
             tile.innerText = "";
         }
-    } else if (key === "enter") {
+        } else if (key === "enter") {
         if (col !== width) return;
-        update();
-        if (!gameOver) {
+        const success = update(); 
+        if (success && !gameOver) {
             row++;
             col = 0;
         }
@@ -143,19 +143,18 @@ function update() {
     }
 
     if (!wordList.includes(guess)) {
-    alert("Такого слова нет в списке!");
-    for (let c = 0; c < width; c++) {
-        let tile = document.getElementById(row + "-" + c);
-        tile.innerText = "";
-        tile.classList.remove("correct", "present", "absent");
+        alert("Такого слова нет в списке!");
+        for (let c = 0; c < width; c++) {
+            let tile = document.getElementById(row + "-" + c);
+            tile.innerText = "";
+            tile.classList.remove("correct", "present", "absent");
+        }
+        col = 0;
+        return false; 
     }
-    col = 0;
-    return;
-}
 
     let colors = Array(width).fill("absent");
     let remainingLetters = word.split("");
-
 
     for (let i = 0; i < width; i++) {
         if (guess[i] === word[i]) {
@@ -180,11 +179,11 @@ function update() {
     }
 
     if (guess === word) {
-    wins++;
-    localStorage.setItem("wins", wins);
-    document.getElementById("wins-count").innerText = wins;
-    document.getElementById("answer").innerText = "🎉 Поздравляем! Вы угадали слово!";
-    gameOver = true;
+        wins++;
+        localStorage.setItem("wins", wins);
+        document.getElementById("wins-count").innerText = wins;
+        document.getElementById("answer").innerText = "🎉 Поздравляем! Вы угадали слово!";
+        gameOver = true;
     }
-    
+    return true;
 }
