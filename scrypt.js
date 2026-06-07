@@ -8,20 +8,16 @@ let gameOver = false;
 let wordList = [];
 let word = "";
 let wins = localStorage.getItem("wins") ? parseInt(localStorage.getItem("wins")) : 0;
+let popup = null;
 
 window.onload = async function () {
-
     const response = await fetch("word.json");
-
     wordList = await response.json();
-
     word = wordList[Math.floor(Math.random() * wordList.length)];
     document.getElementById("wins-count").innerText = wins;
 
     initialize();
-
     checkAndCreateKeyboard();
-
     window.addEventListener("resize", checkAndCreateKeyboard);
 
     document.getElementById("start-btn").addEventListener("click", () => {
@@ -29,20 +25,29 @@ window.onload = async function () {
     });
     
     const themeToggle = document.getElementById("theme-toggle");
-    if (localStorage.getItem("theme") === "dark") {
-        document.body.classList.add("dark-theme");
-        themeToggle.checked = true;
-    }
-    themeToggle.addEventListener("change", (e) => {
-        if (e.target.checked) {
+    if (themeToggle) {
+        if (localStorage.getItem("theme") === "dark") {
             document.body.classList.add("dark-theme");
-            localStorage.setItem("theme", "dark");
-        } else {
-            document.body.classList.remove("dark-theme");
-            localStorage.setItem("theme", "light");
+            themeToggle.checked = true;
         }
-    });
+        themeToggle.addEventListener("change", (e) => {
+            if (e.target.checked) {
+                document.body.classList.add("dark-theme");
+                localStorage.setItem("theme", "dark");
+            } else {
+                document.body.classList.remove("dark-theme");
+                localStorage.setItem("theme", "light");
+            }
+        });
+    }
 
+    popup = document.getElementById("game-over-popup");
+    const restartBtn = document.getElementById("restart-btn");
+    if (restartBtn) {
+        restartBtn.addEventListener("click", () => {
+            restartGame();
+        });
+    }
 };
 
 function initialize() {
@@ -131,19 +136,23 @@ function processKey(e) {
             let tile = document.getElementById(row + "-" + col);
             tile.innerText = "";
         }
-        } else if (key === "enter") {
+        } else if (key === "enter") {  
         if (col !== width) return;
-        const success = update(); 
+        const success = update();
         if (success && !gameOver) {
             row++;
             col = 0;
         }
         if (row === height && !gameOver) {
             gameOver = true;
-            document.getElementById("answer").innerText = "Слово: " + word.toUpperCase();
+            const popupMsg = document.getElementById("popup-message");
+            if (popupMsg) popupMsg.innerText = "😞 Вы проиграли! Загаданное слово: " + word.toUpperCase();
+            if (popup) popup.classList.add("show");
         }
     }
-}
+}  
+    
+
 function update() {
     let guess = "";
     for (let c = 0; c < width; c++) {
@@ -191,8 +200,26 @@ function update() {
         wins++;
         localStorage.setItem("wins", wins);
         document.getElementById("wins-count").innerText = wins;
-        document.getElementById("answer").innerText = "🎉 Поздравляем! Вы угадали слово!";
         gameOver = true;
+        const popupMsg = document.getElementById("popup-message");
+        if (popupMsg) popupMsg.innerText = "🎉 Поздравляем! Вы угадали слово!";
+        if (popup) popup.classList.add("show");
     }
     return true;
+}
+    
+function restartGame() {
+    row = 0;
+    col = 0;
+    gameOver = false;
+    word = wordList[Math.floor(Math.random() * wordList.length)];
+    for (let r = 0; r < height; r++) {
+        for (let c = 0; c < width; c++) {
+            let tile = document.getElementById(r + "-" + c);
+            tile.innerText = "";
+            tile.classList.remove("correct", "present", "absent");
+        }
+    }
+    document.getElementById("answer").innerText = "";
+    if (popup) popup.classList.remove("show");
 }
