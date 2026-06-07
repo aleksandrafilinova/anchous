@@ -100,13 +100,13 @@ hr {
         flex-direction: column;
         align-items: center;
         min-height: 100vh;
-        padding: 10px 0 20px;
+        padding: 4px 0 ;
         box-sizing: border-box;
     }
 
     #board {
         width: min(90vw, 350px);
-        margin-bottom: 20px;
+        margin-bottom: 3px;
     }
 
     #keyboard {
@@ -115,7 +115,7 @@ hr {
         align-items: center;
         width: 95vw;
         max-width: 500px;
-        margin-top: 20px;
+        margin-top: 3px;
         gap: 6px;
     }
 
