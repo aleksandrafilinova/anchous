@@ -14,27 +14,21 @@
         <div id="keyboard"></div>
         <div id="menu">
     <div class="menu-content">
-
         <h1>WORDLE</h1>
         <h2>Статистика</h2>
-
         <p>Угадано слов: <span id="wins-count">0</span></p>
-
         <button id="start-btn">
             Начать игру
         </button>
-
-        <h3>Тема</h3>
-
-        <button id="light-theme">
-            ☀ Светлая
-        </button>
-
-        <button id="dark-theme">
-            🌙 Темная
-        </button>
-        
-
+                <h3>Тема</h3>
+        <div class="theme-switch-wrapper">
+            <span>☀️</span>
+            <label class="theme-switch">
+                <input type="checkbox" id="theme-toggle">
+                <span class="slider round"></span>
+            </label>
+            <span>🌙</span>
+        </div>
     </div>
 </div>
     </body>

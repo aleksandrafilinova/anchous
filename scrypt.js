@@ -27,11 +27,20 @@ window.onload = async function () {
     document.getElementById("start-btn").addEventListener("click", () => {
         document.getElementById("menu").style.display = "none";
     });
-    document.getElementById("dark-theme").addEventListener("click", () => {
+    
+    const themeToggle = document.getElementById("theme-toggle");
+    if (localStorage.getItem("theme") === "dark") {
         document.body.classList.add("dark-theme");
-    });
-    document.getElementById("light-theme").addEventListener("click", () => {
-        document.body.classList.remove("dark-theme");
+        themeToggle.checked = true;
+    }
+    themeToggle.addEventListener("change", (e) => {
+        if (e.target.checked) {
+            document.body.classList.add("dark-theme");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.body.classList.remove("dark-theme");
+            localStorage.setItem("theme", "light");
+        }
     });
 
 };
